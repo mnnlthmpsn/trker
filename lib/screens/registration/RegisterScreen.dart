@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:trker/utils/helpers.dart';
 import 'package:trker/utils/size_config.dart';
 
 class RegisterScreen extends StatefulWidget {
-
   final Widget screen;
 
-  RegisterScreen({ Key key, this.screen }) : super(key: key);
+  RegisterScreen({Key key, this.screen}) : super(key: key);
 
   @override
   _RegisterScreenState createState() => _RegisterScreenState();

@@ -65,6 +65,7 @@ class _KTextFieldState extends State<KTextField> {
                   cursorColor: Colors.grey,
                   cursorWidth: .5,
                   decoration: InputDecoration(
+                      suffixIcon: show ? Icon(Icons.check, color: Colors.green,) : Text(''),
                       enabledBorder: OutlineInputBorder(
                         borderSide:
                         BorderSide(color: show ? Colors.green : Colors.grey),
