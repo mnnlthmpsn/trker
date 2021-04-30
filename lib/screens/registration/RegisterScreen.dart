@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:trker/utils/helpers.dart';
 import 'package:trker/utils/size_config.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -21,6 +20,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-        body: Container(child: widget.screen));
+        body: Container(
+          child: widget.screen,
+        ));
   }
 }

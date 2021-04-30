@@ -11,10 +11,12 @@ class DoubleField extends StatefulWidget {
   final IconData actionIcon;
   final Function buttonPress;
   final bool passed;
+  final int pageNumber;
 
   DoubleField(
       {Key key,
       this.labelText,
+      this.pageNumber,
       this.widget1,
       this.widget2,
       this.actionText,
@@ -44,7 +46,10 @@ class _DoubleFieldState extends State<DoubleField> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Text("10 of 20"),
+                  Text(
+                    "${widget.pageNumber} of 8",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
@@ -54,7 +59,8 @@ class _DoubleFieldState extends State<DoubleField> {
                           SizedBox(
                               width: SizeConfig.blockSizeHorizontal * 45,
                               child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 0, 8, 0),
                                   child: widget.widget1)),
                           SizedBox(
                               width: SizeConfig.blockSizeHorizontal * 45,

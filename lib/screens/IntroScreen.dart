@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:trker/screens/registration/RegisterScreen.dart';
-import 'file:///C:/Users/Jojo/AndroidStudioProjects/trker/lib/screens/registration/regFirstNameScreen.dart';
+import 'package:trker/screens/registration/regFirstNameScreen.dart';
 import 'package:trker/utils/constants.dart';
 import 'package:trker/utils/helpers.dart';
 
@@ -20,8 +20,7 @@ class _IntroScreenState extends State<IntroScreen> {
   }
 
   @override
-  void initState(){
-    // TODO: implement initState
+  void initState() {
     super.initState();
   }
 
@@ -71,7 +70,10 @@ class _IntroScreenState extends State<IntroScreen> {
       skip: const Text('Skip'),
       skipColor: kPrimaryColor,
       doneColor: kPrimaryColor,
-      next: const Icon(Icons.arrow_forward, color: kPrimaryColor,),
+      next: const Icon(
+        Icons.arrow_forward,
+        color: kPrimaryColor,
+      ),
       done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
       curve: Curves.fastLinearToSlowEaseIn,
       controlsMargin: const EdgeInsets.all(16),

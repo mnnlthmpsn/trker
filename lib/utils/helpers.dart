@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 //navigating to a new Screen
 void newPage(context, screen) {
@@ -12,3 +11,4 @@ void dismissKeyboard(context){
     currentFocus.unfocus();
   }
 }
+

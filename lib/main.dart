@@ -1,8 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:trker/utils/constants.dart';
-import 'package:trker/screens/IntroScreen.dart';
+import 'package:trker/screens/introScreen.dart';
 
 void main() async {
   runApp(MaterialApp(

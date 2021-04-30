@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:trker/components/DoubleFields.dart';
-import 'package:trker/screens/registration/locationScreen.dart';
+import 'package:trker/screens/dashboard.dart';
 import 'package:trker/utils/helpers.dart';
 
-class DobNSexScreen extends StatefulWidget {
+class IDScreen extends StatefulWidget {
   @override
-  _DobNSexScreenState createState() => _DobNSexScreenState();
+  _IDScreenState createState() => _IDScreenState();
 }
 
-class _DobNSexScreenState extends State<DobNSexScreen> {
+class _IDScreenState extends State<IDScreen> {
   bool show = false;
-  var genderController = TextEditingController();
-  var dobController = TextEditingController();
+  var typeController = TextEditingController();
+  var numberController = TextEditingController();
   FocusNode focusNode;
 
   @override
@@ -21,7 +21,8 @@ class _DobNSexScreenState extends State<DobNSexScreen> {
     focusNode.addListener(() {
       if (!focusNode.hasFocus) {
         dismissKeyboard(context);
-        if (genderController.text.isNotEmpty && dobController.text.isNotEmpty) {
+        if (typeController.text.isNotEmpty &&
+            numberController.text.isNotEmpty) {
           setState(() {
             show = true;
           });
@@ -36,7 +37,7 @@ class _DobNSexScreenState extends State<DobNSexScreen> {
       onTap: () => dismissKeyboard(context),
       child: DoubleField(
         widget1: TextFormField(
-          controller: genderController,
+          controller: typeController,
           decoration: InputDecoration(
               suffixIcon: show
                   ? Icon(
@@ -52,7 +53,7 @@ class _DobNSexScreenState extends State<DobNSexScreen> {
                 borderSide:
                     BorderSide(color: show ? Colors.green : Colors.grey),
               ),
-              labelText: "Gender",
+              labelText: "ID Type",
               labelStyle: TextStyle(color: show ? Colors.green : Colors.grey),
               errorStyle: TextStyle(color: Colors.red, fontSize: 12),
               focusedErrorBorder:
@@ -62,20 +63,7 @@ class _DobNSexScreenState extends State<DobNSexScreen> {
         ),
         widget2: TextFormField(
           focusNode: focusNode,
-          validator: (value) {
-            if (show == false && value.isEmpty) {
-              setState(() {
-                show = false;
-              });
-              return 'This is a required field';
-            } else {
-              setState(() {
-                show = true;
-              });
-            }
-            return null;
-          },
-          controller: dobController,
+          controller: numberController,
           decoration: InputDecoration(
               suffixIcon: show
                   ? Icon(
@@ -91,7 +79,7 @@ class _DobNSexScreenState extends State<DobNSexScreen> {
                 borderSide:
                     BorderSide(color: show ? Colors.green : Colors.grey),
               ),
-              labelText: "Date of Birth",
+              labelText: "ID Number",
               labelStyle: TextStyle(color: show ? Colors.green : Colors.grey),
               errorStyle: TextStyle(color: Colors.red, fontSize: 12),
               focusedErrorBorder:
@@ -99,11 +87,11 @@ class _DobNSexScreenState extends State<DobNSexScreen> {
               errorBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.red))),
         ),
-        actionText: "Continue",
-        actionIcon: Icons.arrow_forward_rounded,
+        actionText: "Finish",
+        actionIcon: Icons.done,
         passed: this.show,
-        pageNumber: 4,
-        redirectPage: LocationScreen(),
+        pageNumber: 7,
+        redirectPage: Dashboard(),
       ),
     );
   }
