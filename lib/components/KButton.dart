@@ -40,6 +40,9 @@ class _KButtonState extends State<KButton> {
           ),
           onPressed: widget.passed
               ? () {
+                  if (widget.actionText == 'Finish'){
+                    print('done');
+                  }
                   dismissKeyboard(context);
                   newPage(context, widget.redirectPage);
                 }

@@ -47,7 +47,7 @@ class _DoubleFieldState extends State<DoubleField> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Text(
-                    "${widget.pageNumber} of 8",
+                    "${widget.pageNumber} of 7",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                   ),
                   Align(

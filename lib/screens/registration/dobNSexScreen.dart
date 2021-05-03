@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trker/components/DoubleFields.dart';
+import 'package:trker/components/KDropdownField.dart';
 import 'package:trker/screens/registration/locationScreen.dart';
 import 'package:trker/utils/helpers.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:trker/utils/size_config.dart';
+
 
 class DobNSexScreen extends StatefulWidget {
   @override
@@ -10,6 +15,7 @@ class DobNSexScreen extends StatefulWidget {
 
 class _DobNSexScreenState extends State<DobNSexScreen> {
   bool show = false;
+  String _chosenDate = 'Date of Birth';
   var genderController = TextEditingController();
   var dobController = TextEditingController();
   FocusNode focusNode;
@@ -30,75 +36,42 @@ class _DobNSexScreenState extends State<DobNSexScreen> {
     });
   }
 
+  _setSharedPreference(val) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('dob', '${val.year}-${val.month}-${val.day}');
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    dynamic chosenDate;
+
     return GestureDetector(
       onTap: () => dismissKeyboard(context),
       child: DoubleField(
-        widget1: TextFormField(
-          controller: genderController,
-          decoration: InputDecoration(
-              suffixIcon: show
-                  ? Icon(
-                      Icons.check,
-                      color: Colors.green,
-                    )
-                  : Text(''),
-              enabledBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: show ? Colors.green : Colors.grey),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: show ? Colors.green : Colors.grey),
-              ),
-              labelText: "Gender",
-              labelStyle: TextStyle(color: show ? Colors.green : Colors.grey),
-              errorStyle: TextStyle(color: Colors.red, fontSize: 12),
-              focusedErrorBorder:
-                  OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
-              errorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red))),
+        widget1: KDropdownField(items: ['male', 'female'], textLabel: 'Gender',),
+        widget2: SizedBox(
+          height: SizeConfig.blockSizeVertical * 8.5,
+          child: OutlinedButton(
+              onPressed: () {
+                DatePicker.showDatePicker(context,
+                    showTitleActions: true,
+                    minTime: DateTime(1950, 31, 12),
+                    maxTime: DateTime(2018, 31, 12), onChanged: (date) {
+                      print('change $date');
+                    }, onConfirm: (date) {
+                      _setSharedPreference(date);
+                      setState(() {
+                        _chosenDate = '${date.year}-${date.month}-${date.day}';
+                        show = true;
+                      });
+                    }, currentTime: DateTime.now(), locale: LocaleType.en);
+              },
+              child: Text(
+                _chosenDate, style: TextStyle(color: Colors.black54, fontSize: 20),
+              )),
         ),
-        widget2: TextFormField(
-          focusNode: focusNode,
-          validator: (value) {
-            if (show == false && value.isEmpty) {
-              setState(() {
-                show = false;
-              });
-              return 'This is a required field';
-            } else {
-              setState(() {
-                show = true;
-              });
-            }
-            return null;
-          },
-          controller: dobController,
-          decoration: InputDecoration(
-              suffixIcon: show
-                  ? Icon(
-                      Icons.check,
-                      color: Colors.green,
-                    )
-                  : Text(''),
-              enabledBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: show ? Colors.green : Colors.grey),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: show ? Colors.green : Colors.grey),
-              ),
-              labelText: "Date of Birth",
-              labelStyle: TextStyle(color: show ? Colors.green : Colors.grey),
-              errorStyle: TextStyle(color: Colors.red, fontSize: 12),
-              focusedErrorBorder:
-                  OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
-              errorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red))),
-        ),
+
         actionText: "Continue",
         actionIcon: Icons.arrow_forward_rounded,
         passed: this.show,

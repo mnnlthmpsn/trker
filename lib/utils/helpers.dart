@@ -11,4 +11,3 @@ void dismissKeyboard(context){
     currentFocus.unfocus();
   }
 }
-

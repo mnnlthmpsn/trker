@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trker/components/DoubleFields.dart';
+import 'package:trker/components/KDropdownField.dart';
 import 'package:trker/screens/dashboard.dart';
 import 'package:trker/utils/helpers.dart';
 
@@ -21,8 +22,7 @@ class _IDScreenState extends State<IDScreen> {
     focusNode.addListener(() {
       if (!focusNode.hasFocus) {
         dismissKeyboard(context);
-        if (typeController.text.isNotEmpty &&
-            numberController.text.isNotEmpty) {
+        if (numberController.text.isNotEmpty) {
           setState(() {
             show = true;
           });
@@ -36,31 +36,7 @@ class _IDScreenState extends State<IDScreen> {
     return GestureDetector(
       onTap: () => dismissKeyboard(context),
       child: DoubleField(
-        widget1: TextFormField(
-          controller: typeController,
-          decoration: InputDecoration(
-              suffixIcon: show
-                  ? Icon(
-                      Icons.check,
-                      color: Colors.green,
-                    )
-                  : Text(''),
-              enabledBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: show ? Colors.green : Colors.grey),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: show ? Colors.green : Colors.grey),
-              ),
-              labelText: "ID Type",
-              labelStyle: TextStyle(color: show ? Colors.green : Colors.grey),
-              errorStyle: TextStyle(color: Colors.red, fontSize: 12),
-              focusedErrorBorder:
-                  OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
-              errorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red))),
-        ),
+        widget1: KDropdownField(textLabel: 'ID Type', items: ['Voter\'s', 'Driver\'s', 'Ghana Card', 'NHIS'],),
         widget2: TextFormField(
           focusNode: focusNode,
           controller: numberController,

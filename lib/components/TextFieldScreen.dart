@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trker/components/KButton.dart';
 import 'package:trker/utils/helpers.dart';
 
@@ -42,6 +43,7 @@ class _TextFieldScreenState extends State<TextFieldScreen> {
     focusNode = new FocusNode();
     focusNode.addListener(() {
       if (!focusNode.hasFocus) {
+        _storeValue();
         dismissKeyboard(context);
         if (_formKey.currentState.validate()) {
           setState(() {
@@ -50,6 +52,11 @@ class _TextFieldScreenState extends State<TextFieldScreen> {
         }
       }
     });
+  }
+
+  _storeValue() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(widget.labelText.toLowerCase(), textController.text);
   }
 
   @override
@@ -64,7 +71,7 @@ class _TextFieldScreenState extends State<TextFieldScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text('${widget.pageNumber} of 8'),
+                  Text('${widget.pageNumber} of 7', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(

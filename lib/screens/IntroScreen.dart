@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trker/screens/dashboard.dart';
 import 'package:trker/screens/registration/RegisterScreen.dart';
 import 'package:trker/screens/registration/regFirstNameScreen.dart';
 import 'package:trker/utils/constants.dart';
@@ -15,13 +17,21 @@ class _IntroScreenState extends State<IntroScreen> {
   bool status;
 
   // when onboarding ends
-  void _onIntroEnd(context) {
+  void _onIntroEnd(context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('first_time', false);
     newPage(context, RegisterScreen(screen: RegFirstNameScreen()));
   }
 
   @override
   void initState() {
+    _checkStatus();
     super.initState();
+  }
+
+  _checkStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    !prefs.getBool('first_time') ? newPage(context, Dashboard()) : print('first time');
   }
 
   static const pageDecoration = const PageDecoration(

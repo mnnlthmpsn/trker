@@ -38,8 +38,8 @@ class _ContactScreenState extends State<ContactScreen> {
       onTap: () => dismissKeyboard(context),
       child: DoubleField(
         widget1: TextFormField(
+          keyboardType: TextInputType.number,
           inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp(r'\s')),
             FilteringTextInputFormatter.digitsOnly
           ],
           controller: phoneController,
