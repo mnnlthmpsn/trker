@@ -44,8 +44,6 @@ class _DobNSexScreenState extends State<DobNSexScreen> {
   @override
   Widget build(BuildContext context) {
 
-    dynamic chosenDate;
-
     return GestureDetector(
       onTap: () => dismissKeyboard(context),
       child: DoubleField(

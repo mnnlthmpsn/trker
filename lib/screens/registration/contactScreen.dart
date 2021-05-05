@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trker/components/DoubleFields.dart';
 import 'package:trker/screens/registration/idScreen.dart';
 import 'package:trker/utils/helpers.dart';
@@ -21,6 +22,7 @@ class _ContactScreenState extends State<ContactScreen> {
     focusNode = new FocusNode();
     focusNode.addListener(() {
       if (!focusNode.hasFocus) {
+        _storeValue();
         dismissKeyboard(context);
         if (emailController.text.isNotEmpty &&
             phoneController.text.isNotEmpty) {
@@ -30,6 +32,12 @@ class _ContactScreenState extends State<ContactScreen> {
         }
       }
     });
+  }
+
+  _storeValue() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('phone', phoneController.text);
+    await prefs.setString('email', emailController.text);
   }
 
   @override

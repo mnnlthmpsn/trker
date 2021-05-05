@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trker/components/DoubleFields.dart';
 import 'package:trker/components/KDropdownField.dart';
 import 'package:trker/screens/registration/contactScreen.dart';
@@ -22,6 +23,7 @@ class _LocationScreenState extends State<LocationScreen> {
     focusNode.addListener(() {
       if (!focusNode.hasFocus) {
         dismissKeyboard(context);
+        _storeValue();
         if (
             postcodeController.text.isNotEmpty) {
           setState(() {
@@ -30,6 +32,11 @@ class _LocationScreenState extends State<LocationScreen> {
         }
       }
     });
+  }
+
+  _storeValue() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('post_code', postcodeController.text);
   }
 
   @override

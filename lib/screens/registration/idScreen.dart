@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trker/components/DoubleFields.dart';
 import 'package:trker/components/KDropdownField.dart';
 import 'package:trker/screens/dashboard.dart';
@@ -22,6 +23,7 @@ class _IDScreenState extends State<IDScreen> {
     focusNode.addListener(() {
       if (!focusNode.hasFocus) {
         dismissKeyboard(context);
+        _storeValue();
         if (numberController.text.isNotEmpty) {
           setState(() {
             show = true;
@@ -29,6 +31,12 @@ class _IDScreenState extends State<IDScreen> {
         }
       }
     });
+  }
+
+  _storeValue() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('id_type', typeController.text);
+    await prefs.setString('id_number', numberController.text);
   }
 
   @override

@@ -31,7 +31,7 @@ class _IntroScreenState extends State<IntroScreen> {
 
   _checkStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    !prefs.getBool('first_time') ? newPage(context, Dashboard()) : print('first time');
+    !prefs.getBool('first_time') || null ? newPage(context, Dashboard()) : print('first time');
   }
 
   static const pageDecoration = const PageDecoration(
