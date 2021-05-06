@@ -15,6 +15,7 @@ class _RegLastNameScreenState extends State<RegLastNameScreen> {
       onTap: () => dismissKeyboard(context),
       child: TextFieldScreen(
           labelText: "Lastname",
+          inputType: TextInputType.name,
           pageNumber: 2,
           redirectPage: RegOtherNameScreen(),
           actionText: "Continue",

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trker/components/KButton.dart';
 import 'package:trker/utils/helpers.dart';
@@ -10,6 +11,7 @@ class TextFieldScreen extends StatefulWidget {
   final IconData actionIcon;
   final bool skipValidation;
   final int pageNumber;
+  final dynamic inputType;
 
   TextFieldScreen(
       {Key key,
@@ -18,6 +20,7 @@ class TextFieldScreen extends StatefulWidget {
       this.redirectPage,
       this.actionIcon,
       this.actionText,
+      this.inputType,
       this.skipValidation = false})
       : super(key: key);
 
@@ -71,12 +74,16 @@ class _TextFieldScreenState extends State<TextFieldScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text('${widget.pageNumber} of 7', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
+                  Text(
+                    '${widget.pageNumber} of 7',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
                       child: TextFormField(
+                        keyboardType: widget.inputType,
                         focusNode: focusNode,
                         validator: (value) {
                           if (show == false && value.isEmpty) {

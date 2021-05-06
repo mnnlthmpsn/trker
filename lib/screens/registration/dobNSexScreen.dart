@@ -47,7 +47,7 @@ class _DobNSexScreenState extends State<DobNSexScreen> {
     return GestureDetector(
       onTap: () => dismissKeyboard(context),
       child: DoubleField(
-        widget1: KDropdownField(items: ['male', 'female'], textLabel: 'Gender',),
+        widget1: KDropdownField(items: [{ 'key': 'Male', 'value': 'M' }, { 'key': 'Female', 'value': 'F' }], textLabel: 'Gender',),
         widget2: SizedBox(
           height: SizeConfig.blockSizeVertical * 8.5,
           child: OutlinedButton(

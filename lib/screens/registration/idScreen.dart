@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trker/components/DoubleFields.dart';
 import 'package:trker/components/KDropdownField.dart';
 import 'package:trker/screens/dashboard.dart';
+import 'package:trker/screens/registration/PhoneScreen.dart';
 import 'package:trker/utils/helpers.dart';
 
 class IDScreen extends StatefulWidget {
@@ -39,12 +40,22 @@ class _IDScreenState extends State<IDScreen> {
     await prefs.setString('id_number', numberController.text);
   }
 
+  List<Map<String, String>> _idTypes = [
+    { 'key': 'DV License', 'value': 'Driver\'s License' },
+    { 'key': 'NHIS', 'value': 'NHIS' },
+    { 'key': 'Ghana Card', 'value': 'Ghana Card' },
+    { 'key': 'Voter ID', 'value': 'Voter\'s ID' },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => dismissKeyboard(context),
       child: DoubleField(
-        widget1: KDropdownField(textLabel: 'ID Type', items: ['Voter\'s', 'Driver\'s', 'Ghana Card', 'NHIS'],),
+        widget1: KDropdownField(
+          textLabel: 'ID Type',
+          items: _idTypes,
+        ),
         widget2: TextFormField(
           focusNode: focusNode,
           controller: numberController,
@@ -71,11 +82,11 @@ class _IDScreenState extends State<IDScreen> {
               errorBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.red))),
         ),
-        actionText: "Finish",
+        actionText: "Continue",
         actionIcon: Icons.done,
         passed: this.show,
         pageNumber: 7,
-        redirectPage: Dashboard(),
+        redirectPage: PhoneScreen(),
       ),
     );
   }

@@ -13,7 +13,7 @@ class LocationScreen extends StatefulWidget {
 class _LocationScreenState extends State<LocationScreen> {
   bool show = false;
   var regionController = TextEditingController();
-  var postcodeController = TextEditingController();
+  var districtController = TextEditingController();
   FocusNode focusNode;
 
   @override
@@ -25,7 +25,7 @@ class _LocationScreenState extends State<LocationScreen> {
         dismissKeyboard(context);
         _storeValue();
         if (
-            postcodeController.text.isNotEmpty) {
+            districtController.text.isNotEmpty) {
           setState(() {
             show = true;
           });
@@ -36,18 +36,26 @@ class _LocationScreenState extends State<LocationScreen> {
 
   _storeValue() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('post_code', postcodeController.text);
+    await prefs.setString('district', districtController.text);
   }
+
+  var _regions = [
+    { 'key': 'Accra', 'value': 'Greater Accra'},
+    { 'key': 'Brong Ahafo', 'value': 'Brong Ahafo'},
+    { 'key': 'Central', 'value': 'Central Region'},
+    { 'key': 'Easter', 'value': 'Eastern Region'},
+    { 'key': 'Volta', 'value': 'Volta Region'}
+  ];
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => dismissKeyboard(context),
       child: DoubleField(
-        widget1: KDropdownField(textLabel: 'Regions', items: ['Accra', 'Central', 'North1', 'North2', 'North3', 'North4', 'North5', 'North6', 'North7','North8', 'North9'],),
+        widget1: KDropdownField(textLabel: 'Regions', items: _regions,),
         widget2: TextFormField(
           focusNode: focusNode,
-          controller: postcodeController,
+          controller: districtController,
           decoration: InputDecoration(
               suffixIcon: show
                   ? Icon(
@@ -63,7 +71,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 borderSide:
                     BorderSide(color: show ? Colors.green : Colors.grey),
               ),
-              labelText: "Post Code",
+              labelText: "District",
               labelStyle: TextStyle(color: show ? Colors.green : Colors.grey),
               errorStyle: TextStyle(color: Colors.red, fontSize: 12),
               focusedErrorBorder:

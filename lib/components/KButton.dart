@@ -23,7 +23,6 @@ class KButton extends StatefulWidget {
 }
 
 class _KButtonState extends State<KButton> {
-
   _addUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var fname = prefs.getString('firstname');
@@ -34,12 +33,25 @@ class _KButtonState extends State<KButton> {
     var postCode = prefs.getString('post_code');
     var idNum = prefs.getString('id_number');
     var region = prefs.getString('regions');
+    var district = prefs.getString('district');
     var gender = prefs.getString('gender');
     var idType = prefs.getString('idtype');
     var dob = prefs.getString('dob');
 
-    User obj = User(firstname: fname, lastname: lname, otherNames: onames, phone: phone, email: email, region: region, gender: gender, postCode: postCode, idNumber: idNum, idType: idType, dob: dob );
-    obj.addUser();
+    User obj = User(
+        firstname: fname,
+        lastname: lname,
+        othername: onames,
+        phone: phone,
+        email: email,
+        region: region,
+        district: district,
+        sex: gender,
+        post_code: postCode,
+        id_number: idNum,
+        id_type: idType,
+        dob: dob);
+    await obj.addUser();
   }
 
   @override
@@ -53,7 +65,6 @@ class _KButtonState extends State<KButton> {
           style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(
                   widget.passed ? Colors.green : Colors.grey[200])),
-
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -61,11 +72,13 @@ class _KButtonState extends State<KButton> {
           ),
           onPressed: widget.passed
               ? () async {
-                  if (widget.actionText == 'Finish'){
+                  if (widget.actionText == 'Finish') {
+                    newPage(context, widget.redirectPage);
                     await _addUser();
+                  } else {
+                    dismissKeyboard(context);
+                    newPage(context, widget.redirectPage);
                   }
-                  dismissKeyboard(context);
-                  newPage(context, widget.redirectPage);
                 }
               : null,
         ),

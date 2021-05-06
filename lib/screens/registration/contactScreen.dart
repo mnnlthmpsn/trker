@@ -13,7 +13,7 @@ class ContactScreen extends StatefulWidget {
 class _ContactScreenState extends State<ContactScreen> {
   bool show = false;
   var emailController = TextEditingController();
-  var phoneController = TextEditingController();
+  var postController = TextEditingController();
   FocusNode focusNode;
 
   @override
@@ -25,7 +25,7 @@ class _ContactScreenState extends State<ContactScreen> {
         _storeValue();
         dismissKeyboard(context);
         if (emailController.text.isNotEmpty &&
-            phoneController.text.isNotEmpty) {
+            postController.text.isNotEmpty) {
           setState(() {
             show = true;
           });
@@ -36,7 +36,7 @@ class _ContactScreenState extends State<ContactScreen> {
 
   _storeValue() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('phone', phoneController.text);
+    await prefs.setString('post_code', postController.text);
     await prefs.setString('email', emailController.text);
   }
 
@@ -47,10 +47,7 @@ class _ContactScreenState extends State<ContactScreen> {
       child: DoubleField(
         widget1: TextFormField(
           keyboardType: TextInputType.number,
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly
-          ],
-          controller: phoneController,
+          controller: postController,
           decoration: InputDecoration(
               suffixIcon: show
                   ? Icon(
@@ -66,7 +63,7 @@ class _ContactScreenState extends State<ContactScreen> {
                 borderSide:
                     BorderSide(color: show ? Colors.green : Colors.grey),
               ),
-              labelText: "Phone",
+              labelText: "Post Code",
               labelStyle: TextStyle(color: show ? Colors.green : Colors.grey),
               errorStyle: TextStyle(color: Colors.red, fontSize: 12),
               focusedErrorBorder:
@@ -75,6 +72,7 @@ class _ContactScreenState extends State<ContactScreen> {
                   borderSide: BorderSide(color: Colors.red))),
         ),
         widget2: TextFormField(
+          keyboardType: TextInputType.emailAddress,
           focusNode: focusNode,
           controller: emailController,
           decoration: InputDecoration(

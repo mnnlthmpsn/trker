@@ -25,7 +25,7 @@ class _IntroScreenState extends State<IntroScreen> {
 
   @override
   void initState() {
-    _checkStatus();
+    // _checkStatus();
     super.initState();
   }
 

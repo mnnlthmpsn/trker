@@ -15,6 +15,7 @@ class _RegOtherNameScreenState extends State<RegOtherNameScreen> {
       onTap: () => dismissKeyboard(context),
       child: TextFieldScreen(
         labelText: "Other Names",
+        inputType: TextInputType.name,
         pageNumber: 3,
         redirectPage: DobNSexScreen(),
         actionText: "Continue",
