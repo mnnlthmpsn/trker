@@ -36,11 +36,10 @@ class _IDScreenState extends State<IDScreen> {
 
   _storeValue() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('id_type', typeController.text);
     await prefs.setString('id_number', numberController.text);
   }
 
-  List<Map<String, String>> _idTypes = [
+  var _idTypes = [
     { 'key': 'DV License', 'value': 'Driver\'s License' },
     { 'key': 'NHIS', 'value': 'NHIS' },
     { 'key': 'Ghana Card', 'value': 'Ghana Card' },
@@ -83,7 +82,7 @@ class _IDScreenState extends State<IDScreen> {
                   borderSide: BorderSide(color: Colors.red))),
         ),
         actionText: "Continue",
-        actionIcon: Icons.done,
+        actionIcon: Icons.arrow_forward_rounded,
         passed: this.show,
         pageNumber: 7,
         redirectPage: PhoneScreen(),

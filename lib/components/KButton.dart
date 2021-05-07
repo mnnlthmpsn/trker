@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 import 'package:trker/models/User.dart';
 import 'package:trker/utils/helpers.dart';
 import 'package:trker/utils/size_config.dart';
@@ -35,7 +36,7 @@ class _KButtonState extends State<KButton> {
     var region = prefs.getString('regions');
     var district = prefs.getString('district');
     var gender = prefs.getString('gender');
-    var idType = prefs.getString('idtype');
+    var idType = prefs.getString('id type');
     var dob = prefs.getString('dob');
 
     User obj = User(
@@ -52,6 +53,12 @@ class _KButtonState extends State<KButton> {
         id_type: idType,
         dob: dob);
     await obj.addUser();
+  }
+
+  @override
+  void dispose() {
+    SmsAutoFill().unregisterListener();
+    super.dispose();
   }
 
   @override

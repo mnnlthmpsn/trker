@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trker/components/DoubleFields.dart';
+import 'package:trker/screens/OTPScreen.dart';
 import 'package:trker/screens/registration/idScreen.dart';
 import 'package:trker/utils/helpers.dart';
 

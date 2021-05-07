@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trker/components/TextFieldScreen.dart';
-import 'package:trker/screens/dashboard.dart';
+import 'package:trker/screens/OTPScreen.dart';
 import 'package:trker/utils/helpers.dart';
 
 class PhoneScreen extends StatefulWidget {
@@ -17,8 +17,8 @@ class _PhoneScreenState extends State<PhoneScreen> {
       child: TextFieldScreen(
           inputType: TextInputType.phone,
           labelText: 'Phone',
-          pageNumber: 1,
-          redirectPage: Dashboard(),
+          pageNumber: 8,
+          redirectPage: OTPScreen(),
           actionText: "Finish",
           actionIcon: Icons.arrow_forward_rounded),
     );

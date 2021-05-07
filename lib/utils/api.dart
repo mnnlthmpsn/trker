@@ -35,3 +35,18 @@ Future signup(User user) async {
     throw err;
   });
 }
+
+Future validate(phone, code) async {
+  var data = {
+    "phone": phone,
+    "validation_code": code
+  };
+
+  var headers = {"Content-Type": "application/json;charset=UTF-8"};
+  var encode = json.encode(data);
+
+  return await http
+      .post(Uri.parse(url + '/validate'), headers: headers, body: encode)
+      .then((response) => jsonDecode(response.body))
+      .catchError((err) => throw err);
+}
