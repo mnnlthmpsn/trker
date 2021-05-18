@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trker/utils/helpers.dart';
+import 'package:trker/utils/constants.dart';
 
 class Registration extends StatefulWidget {
   const Registration({Key key}) : super(key: key);
@@ -10,38 +11,36 @@ class Registration extends StatefulWidget {
 
 class _RegistrationState extends State<Registration> {
   int _currentStep = 0;
-  dynamic selectedValue = {};
+  GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+  bool _buttonDone = false;
 
-  final _formKey = GlobalKey<FormState>();
-  final _addressFormKey = GlobalKey<FormState>();
+  String _chosenValue = 'Male';
+  String _chosenRegion = 'Greater Accra';
 
-  final fnameController = TextEditingController();
-  final lnameController = TextEditingController();
-  final onameController = TextEditingController();
-  final pcodeController = TextEditingController();
-  final districtController = TextEditingController();
+  var sex = ['Male', 'Female'];
+  var regions = ['Greater Accra', 'Central Region'];
 
-  _tapped(int step) {
-    setState(() {
-      _currentStep = step;
-    });
-  }
+  _tapped(int step) => setState(() => _currentStep = step);
 
-  _continue() {
-    setState(() {
-      _currentStep += 1;
-    });
-  }
+  void _continue() => _currentStep >= 0 && _currentStep < 2
+      ? setState(() => _currentStep += 1)
+      : null;
 
-  _validator(value){
-    if (value.isEmpty){
-      return 'Required field';
+  _finished() {
+    if (_formKey.currentState.validate() == false) {
+      // change icon from finish
+      setState(() {
+        _buttonDone = false;
+      });
+    } else {
+      print('validated successfully continue now');
     }
-    return null;
   }
 
   @override
   Widget build(BuildContext context) {
+    final node = FocusScope.of(context);
+
     return Scaffold(
       appBar: AppBar(
           title: Text(
@@ -49,80 +48,151 @@ class _RegistrationState extends State<Registration> {
             style: TextStyle(color: Colors.white),
           ),
           automaticallyImplyLeading: false),
-      body: Stepper(
-          controlsBuilder: (BuildContext context,
-              {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
-            return Row();
-          },
-          type: StepperType.vertical,
-          physics: ScrollPhysics(),
-          currentStep: _currentStep,
-          onStepTapped: (step) => _tapped(step),
-          steps: <Step>[
-            Step(
-                title: Text('Account'),
-                content: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: <Widget>[
-                      TextFormField(
-                        validator: (value) => _validator(value),
-                        decoration: InputDecoration(labelText: 'Firstname'),
-                        controller: fnameController,
-                      ),
-                      TextFormField(
-                        validator: (value) => _validator(value),
-                        decoration: InputDecoration(labelText: 'Other Name'),
-                        controller: onameController,
-                      ),
-                      TextFormField(
-                        validator: (value) => _validator(value),
-                        controller: lnameController,
-                        onEditingComplete: _continue,
-                        decoration: InputDecoration(labelText: 'Lastname'),
-                      ),
-                    ],
-                  ),
-                ),
-                isActive: _currentStep >= 0,
-                state: _currentStep >= 0
-                    ? StepState.complete
-                    : StepState.disabled),
-            Step(
-              title: new Text('Address'),
-              content: Form(
-                key: _addressFormKey,
-                child: Column(
-                  children: <Widget>[
-                    TextFormField(
-                      controller: districtController,
-                      decoration: InputDecoration(labelText: 'District'),
+      body: GestureDetector(
+        onTap: () => dismissKeyboard(context),
+        child: Form(
+          key: _formKey,
+          child: Stepper(
+              controlsBuilder: (BuildContext context,
+                  {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+                return Row();
+              },
+              type: StepperType.vertical,
+              physics: ScrollPhysics(),
+              currentStep: _currentStep,
+              onStepTapped: (step) => _tapped(step),
+              // onStepContinue: _continue,
+              steps: <Step>[
+                Step(
+                    title: Text('Personal Info'),
+                    content: Column(
+                      children: <Widget>[
+                        TextFormField(
+                          keyboardType: TextInputType.text,
+                          onEditingComplete: () => node.nextFocus(),
+                          validator: (value) =>
+                              value.isEmpty ? 'Required Field' : null,
+                          decoration: InputDecoration(labelText: 'Firstname'),
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.text,
+                          onEditingComplete: () => node.nextFocus(),
+                          decoration: InputDecoration(labelText: 'Other names'),
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.text,
+                          onEditingComplete: () => node.nextFocus(),
+                          validator: (value) =>
+                              value.isEmpty ? 'Required Field' : null,
+                          decoration: InputDecoration(labelText: 'Lastname'),
+                        ),
+                        DropdownButton(
+                          itemHeight: 70.0,
+                          value: _chosenValue,
+                          isExpanded: true,
+                          items: sex.map<DropdownMenuItem<String>>((String value){
+                            return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value)
+                            );
+                          }).toList(),
+                          hint: Text('Sex'),
+                          onChanged: (value) => setState(() => _chosenValue = value),
+                        ),
+                        TextFormField(
+                          decoration:
+                              InputDecoration(labelText: 'Date of Birth'),
+                        )
+                      ],
                     ),
-                    TextFormField(
-                      controller: pcodeController,
-                      decoration: InputDecoration(labelText: 'Post Code'),
+                    isActive: _currentStep > 0,
+                    state: _currentStep >= 0
+                        ? StepState.complete
+                        : StepState.disabled),
+                Step(
+                    title: Text('Address'),
+                    content: Column(
+                      children: <Widget>[
+                        DropdownButton(
+                          itemHeight: 70,
+                          value: _chosenRegion,
+                          isExpanded: true,
+                          items: regions.map<DropdownMenuItem<String>>((String value){
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value)
+                            );
+                          }).toList(),
+                          hint: Text('Region'),
+                          onChanged: (value) => setState(() => _chosenRegion = value),
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.text,
+                          onEditingComplete: () => node.nextFocus(),
+                          validator: (value) =>
+                              value.isEmpty ? 'Required Field' : null,
+                          decoration: InputDecoration(labelText: 'District'),
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.text,
+                          onEditingComplete: () => node.nextFocus(),
+                          validator: (value) =>
+                              value.isEmpty ? 'Required Field' : null,
+                          decoration: InputDecoration(labelText: 'Postcode'),
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(labelText: 'ID Type'),
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.numberWithOptions(),
+                          onEditingComplete: () => node.nextFocus(),
+                          validator: (value) =>
+                              value.isEmpty ? 'Required Field' : null,
+                          decoration: InputDecoration(labelText: 'ID Number'),
+                        )
+                      ],
                     ),
-                  ],
-                ),
+                    isActive: _currentStep >= 0,
+                    state: _currentStep >= 1
+                        ? StepState.complete
+                        : StepState.disabled),
+                Step(
+                    title: Text('Contact'),
+                    content: Column(
+                      children: <Widget>[
+                        TextFormField(
+                          onEditingComplete: () => node.nextFocus(),
+                          validator: (value) =>
+                              value.isEmpty ? 'Required Field' : null,
+                          decoration: InputDecoration(labelText: 'Email'),
+                          keyboardType: TextInputType.emailAddress,
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(labelText: 'Phone'),
+                          keyboardType: TextInputType.phone,
+                          onEditingComplete: () {
+                            setState(() => _buttonDone = true);
+                            dismissKeyboard(context);
+                          },
+                        )
+                      ],
+                    ),
+                    isActive: _currentStep >= 0,
+                    state: _currentStep == 3
+                        ? StepState.disabled
+                        : StepState.complete)
+              ]),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _buttonDone ? _finished() : _continue(),
+        child: _buttonDone
+            ? Icon(Icons.done, color: kPrimaryColor)
+            : Icon(
+                Icons.keyboard_arrow_down,
+                color: kPrimaryColor,
               ),
-              isActive: _currentStep >= 0,
-              state:
-                  _currentStep >= 1 ? StepState.complete : StepState.disabled,
-            ),
-            Step(
-              title: new Text('Mobile Number'),
-              content: Column(
-                children: <Widget>[
-                  TextFormField(
-                    decoration: InputDecoration(labelText: 'Mobile Number'),
-                  ),
-                ],
-              ),
-              isActive: _currentStep >= 0,
-              state:
-                  _currentStep >= 2 ? StepState.complete : StepState.disabled,
-            ),
-          ]),
+      ),
     );
   }
 }
