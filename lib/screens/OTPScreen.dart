@@ -5,7 +5,6 @@ import 'package:sms_autofill/sms_autofill.dart';
 import 'package:trker/utils/api.dart';
 
 class OTPScreen extends StatefulWidget {
-
   const OTPScreen({Key key}) : super(key: key);
 
   @override
@@ -36,25 +35,25 @@ class _OTPScreenState extends State<OTPScreen> {
     return Scaffold(
         body: Center(
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: PinFieldAutoFill(
-      decoration: UnderlineDecoration(
-        textStyle: TextStyle(fontSize: 20, color: Colors.black),
-        colorBuilder: FixedColorBuilder(Colors.black.withOpacity(0.3)),
+      padding: const EdgeInsets.all(10.0),
+      child: PinFieldAutoFill(
+        decoration: UnderlineDecoration(
+          textStyle: TextStyle(fontSize: 20, color: Colors.black),
+          colorBuilder: FixedColorBuilder(Colors.black.withOpacity(0.3)),
+        ),
+        currentCode: _code,
+        codeLength: 6,
+        onCodeSubmitted: (code) {},
+        onCodeChanged: (code) async {
+          if (code.length == 6) {
+            FocusScope.of(context).requestFocus(FocusNode());
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            var phone = prefs.getString('phone');
+            var res = await validate(phone, code);
+            print(res);
+          }
+        },
       ),
-      currentCode: _code,
-      codeLength: 6,
-      onCodeSubmitted: (code) {},
-      onCodeChanged: (code) async {
-        if (code.length == 6){
-          FocusScope.of(context).requestFocus(FocusNode());
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          var phone =  prefs.getString('phone');
-          var res = await validate(phone, code);
-          print(res);
-        }
-      },
-    ),
-            )));
+    )));
   }
 }

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trker/screens/dashboard.dart';
-import 'package:trker/screens/registration/RegisterScreen.dart';
-import 'package:trker/screens/registration/regFirstNameScreen.dart';
+import 'package:trker/screens/registration.dart';
 import 'package:trker/utils/constants.dart';
 import 'package:trker/utils/helpers.dart';
 
@@ -20,7 +19,7 @@ class _IntroScreenState extends State<IntroScreen> {
   void _onIntroEnd(context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('first_time', false);
-    newPage(context, RegisterScreen(screen: RegFirstNameScreen()));
+    newPageDestroyPrevious(context, Registration());
   }
 
   @override
