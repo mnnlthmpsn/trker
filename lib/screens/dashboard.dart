@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trker/screens/Home.dart';
+import 'package:trker/utils/constants.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -7,26 +9,50 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-
+  int _currentIndex = 1;
+  final List<Widget> _children = [
+    Text('Notifications'),
+    Home(),
+    Text('Settings'),
+  ];
 
   @override
   void initState() {
-    _setFirst_time_status();
+    setFirstTimeStatus();
     // TODO: implement initState
     super.initState();
   }
 
-  _setFirst_time_status() async {
+  setFirstTimeStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('first_time', false);
   }
 
+  void _onTabPressed(int i) {
+    setState(() {
+      _currentIndex = i;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text('Welcome to your Dashboard'),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0.5,
+        automaticallyImplyLeading: false,
+        iconTheme: IconThemeData(color: kPrimaryColor),
+      ),
+      body: SafeArea(child: _children[_currentIndex]),
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: _onTabPressed,
+        currentIndex: _currentIndex,
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.notifications_active_outlined), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: ''),
+        ],
       ),
     );
   }
