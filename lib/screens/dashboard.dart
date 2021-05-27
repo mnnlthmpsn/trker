@@ -12,7 +12,8 @@ class _DashboardState extends State<Dashboard> {
   int _currentIndex = 1;
   final List<Widget> _children = [
     Text('Notifications'),
-    Home(),
+    // Home(),
+    Text('Home'),
     Text('Settings'),
   ];
 
@@ -37,14 +38,9 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0.5,
-        automaticallyImplyLeading: false,
-        iconTheme: IconThemeData(color: kPrimaryColor),
-      ),
       body: SafeArea(child: _children[_currentIndex]),
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: kPrimaryColor,
         onTap: _onTabPressed,
         currentIndex: _currentIndex,
         items: [

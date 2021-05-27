@@ -1,12 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trker/screens/OTPScreen.dart';
 import 'package:trker/utils/api.dart';
 import 'package:trker/utils/helpers.dart';
 
 class User {
-
 //  add user
-  dynamic addUser() async {
+  dynamic addUser(context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     var user = {
@@ -25,11 +25,15 @@ class User {
     };
 
     await signup(user).then((res) {
-      print(res);
-      return res;
+      if (res['status'] == '3' || res['status'] == '2') {
+        throw "Account already exists";
+      } else if (res['status'] == '1') {
+        newPageDestroyPrevious(context, OTPScreen());
+      } else {
+        throw "An error occured";
+      }
     }).catchError((err) {
-      print(err);
-      return err;
+      showSnack(context, err.toString());
     });
   }
 }

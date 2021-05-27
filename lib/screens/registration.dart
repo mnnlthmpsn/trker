@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trker/models/User.dart';
-import 'package:trker/screens/OTPScreen.dart';
 import 'package:trker/utils/helpers.dart';
 import 'package:trker/utils/constants.dart';
 import 'package:intl/intl.dart';
@@ -18,6 +18,17 @@ class _RegistrationState extends State<Registration> {
   int _currentStep = 0;
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   bool _buttonDone = false;
+  bool _loading = false;
+
+  // controllers
+  TextEditingController fnameController = TextEditingController();
+  TextEditingController lnameController = TextEditingController();
+  TextEditingController onameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController districtController = TextEditingController();
+  TextEditingController pcodeController = TextEditingController();
+  TextEditingController idNumberController = TextEditingController();
 
   // chosen Values
   String _chosenValue;
@@ -42,6 +53,7 @@ class _RegistrationState extends State<Registration> {
       ? setState(() => _currentStep += 1)
       : null;
 
+
   _finished() async {
     if (_formKey.currentState.validate() == false) {
       // change icon from finish
@@ -49,71 +61,38 @@ class _RegistrationState extends State<Registration> {
         _buttonDone = false;
       });
     } else if (_chosenIDType == null) {
-      final snackBar = SnackBar(
-        content: Text(
-          'ID Type field can\'t be empty',
-          style: TextStyle(color: Colors.white),
-          textAlign: TextAlign.center,
-        ),
-        backgroundColor: Colors.red,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      showSnack(context, 'ID Type field can\'t be empty');
     } else if (_chosenDate == null) {
-      final snackBar = SnackBar(
-        content: Text(
-          'Date of Birth field can\'t be empty',
-          style: TextStyle(color: Colors.white),
-          textAlign: TextAlign.center,
-        ),
-        backgroundColor: Colors.red,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      showSnack(context, 'Date of Birth field can\'t be empty');
     } else if (_chosenRegion == null) {
-      final snackBar = SnackBar(
-        content: Text(
-          'Region field can\'t be empty',
-          style: TextStyle(color: Colors.white),
-          textAlign: TextAlign.center,
-        ),
-        backgroundColor: Colors.red,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      showSnack(context, 'Region field can\'t be empty');
     } else if (_chosenValue == null) {
-      final snackBar = SnackBar(
-        content: Text(
-          'Gender field can\'t be empty',
-          style: TextStyle(color: Colors.white),
-          textAlign: TextAlign.center,
-        ),
-        backgroundColor: Colors.red,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      showSnack(context, 'Gender field can\'t be empty');
     } else {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      // set sharedPreferences here
+      prefs.setString('firstname', fnameController.text);
+      prefs.setString('lastname', lnameController.text);
+      prefs.setString('other_names', onameController.text);
+      prefs.setString('phone', phoneController.text);
+      prefs.setString('email', emailController.text);
+      prefs.setString('district', districtController.text);
+      prefs.setString('post_code', pcodeController.text);
+      prefs.setString('id_number', idNumberController.text);
 
+      setState(() {
+        _loading = true;
+      });
       var user = User();
-      await user
-          .addUser()
-          .then((res) => newPage(context, OTPScreen()))
-          .catchError((err) => {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(
-                    err.toString(),
-                    style: TextStyle(color: Colors.white),
-                    textAlign: TextAlign.center,
-                  ),
-                  backgroundColor: Colors.red,
-                ))
-              });
+      await user.addUser(context);
+      setState(() {
+        _loading = false;
+      });
     }
-  }
-
-  _storeMe(key, val, type) async {
-    await storeInLocalStorage(key, val, type);
   }
 
   @override
   Widget build(BuildContext context) {
-    final node = FocusScope.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -162,26 +141,20 @@ class _RegistrationState extends State<Registration> {
                               children: <Widget>[
                                 TextFormField(
                                   keyboardType: TextInputType.text,
+                                  controller: fnameController,
                                   validator: (value) =>
                                       value.isEmpty ? 'Required Field' : null,
                                   decoration:
                                       InputDecoration(labelText: 'Firstname'),
-                                  onSaved: (String value) {
-                                    _storeMe('firstname', value, 'str');
-                                  },
                                 ),
                                 TextFormField(
-                                  onSaved: (String value) {
-                                    _storeMe('other_names', value, 'str');
-                                  },
+                                  controller: onameController,
                                   keyboardType: TextInputType.text,
                                   decoration:
                                       InputDecoration(labelText: 'Other names'),
                                 ),
                                 TextFormField(
-                                  onSaved: (String value) {
-                                    _storeMe('lastname', value, 'str');
-                                  },
+                                  controller: lnameController,
                                   keyboardType: TextInputType.text,
                                   validator: (value) =>
                                       value.isEmpty ? 'Required Field' : null,
@@ -200,7 +173,7 @@ class _RegistrationState extends State<Registration> {
                                   hint: Text('Select Gender'),
                                   onChanged: (value) => {
                                     setState(() => _chosenValue = value),
-                                    storeInLocalStorage('sex', value, 'str')
+                                    storeInLocalStorage('sex', value[0].toUpperCase(), 'str')
                                   },
                                 ),
                                 Container(
@@ -259,9 +232,7 @@ class _RegistrationState extends State<Registration> {
                                   },
                                 ),
                                 TextFormField(
-                                  onSaved: (String value) {
-                                    _storeMe('district', value, 'str');
-                                  },
+                                  controller: districtController,
                                   keyboardType: TextInputType.text,
                                   validator: (value) =>
                                       value.isEmpty ? 'Required Field' : null,
@@ -269,9 +240,7 @@ class _RegistrationState extends State<Registration> {
                                       InputDecoration(labelText: 'District'),
                                 ),
                                 TextFormField(
-                                  onSaved: (String value) {
-                                    _storeMe('post_code', value, 'str');
-                                  },
+                                  controller: pcodeController,
                                   keyboardType: TextInputType.text,
                                   validator: (value) =>
                                       value.isEmpty ? 'Required Field' : null,
@@ -295,9 +264,7 @@ class _RegistrationState extends State<Registration> {
                                   },
                                 ),
                                 TextFormField(
-                                  onSaved: (String value) {
-                                    _storeMe('id_number', value, 'str');
-                                  },
+                                  controller: idNumberController,
                                   keyboardType:
                                       TextInputType.numberWithOptions(),
                                   validator: (value) =>
@@ -316,9 +283,7 @@ class _RegistrationState extends State<Registration> {
                             content: Column(
                               children: <Widget>[
                                 TextFormField(
-                                  onSaved: (String value) {
-                                    _storeMe('email', value, 'str');
-                                  },
+                                  controller: emailController,
                                   validator: (value) =>
                                       value.isEmpty ? 'Required Field' : null,
                                   decoration:
@@ -326,9 +291,7 @@ class _RegistrationState extends State<Registration> {
                                   keyboardType: TextInputType.emailAddress,
                                 ),
                                 TextFormField(
-                                  onSaved: (String value) {
-                                    _storeMe('phone', value, 'str');
-                                  },
+                                  controller: phoneController,
                                   decoration:
                                       InputDecoration(labelText: 'Phone'),
                                   keyboardType: TextInputType.phone,
@@ -353,12 +316,16 @@ class _RegistrationState extends State<Registration> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: kPrimaryColor,
         onPressed: () => _buttonDone ? _finished() : _continue(),
         child: _buttonDone
-            ? Icon(Icons.done, color: kPrimaryColor)
+            ? !_loading ? Icon(Icons.done, color: Colors.white) : SpinKitChasingDots(
+          color: Colors.white,
+          size: 30.0,
+        )
             : Icon(
                 Icons.keyboard_arrow_down,
-                color: kPrimaryColor,
+                color: Colors.white,
               ),
       ),
     );

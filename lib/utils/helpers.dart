@@ -45,3 +45,14 @@ dynamic storeInLocalStorage(key, val, type) async {
   }
 }
 
+void showSnack(context, msg) {
+  final snackBar = SnackBar(
+    content: Text(
+      msg.toString(),
+      style: TextStyle(color: Colors.white),
+      textAlign: TextAlign.center,
+    ),
+    backgroundColor: Colors.red,
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}

@@ -47,3 +47,18 @@ Future validate(phone, code) async {
       .then((response) => jsonDecode(response.body))
       .catchError((err) => throw err);
 }
+
+Future resendOTP(phone) async {
+  var data = {
+    "phone": phone,
+    "key":  "123qwe!@#"
+  };
+
+  var headers = {"Content-Type": "application/json;charset=UTF-8"};
+  var encode = json.encode(data);
+
+  return await http
+      .post(Uri.parse(url + '/resend_pin'), headers: headers, body: encode)
+      .then((response) => jsonDecode(response.body))
+      .catchError((err) => throw err);
+}
