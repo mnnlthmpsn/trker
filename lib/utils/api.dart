@@ -62,3 +62,33 @@ Future resendOTP(phone) async {
       .then((response) => jsonDecode(response.body))
       .catchError((err) => throw err);
 }
+
+Future validateUser(phone) async {
+  var data = {
+    "phone": phone,
+    "key":  "123qwe!@#"
+  };
+
+  var headers = {"Content-Type": "application/json;charset=UTF-8"};
+  var encode = json.encode(data);
+
+  return await http
+      .post(Uri.parse(url + '/connect'), headers: headers, body: encode)
+      .then((response) => jsonDecode(response.body))
+      .catchError((err) => throw err);
+}
+
+Future fetchOrders() async {
+  var data = {
+    "vpost_code": "00920266666003",
+    "key": "123qwe!@#"
+  };
+
+  var headers = {"Content-Type": "application/json;charset=UTF-8"};
+  var encode = json.encode(data);
+
+  return await http
+      .post(Uri.parse(url + '/get_orders'), headers: headers, body: encode)
+      .then((response) => jsonDecode(response.body))
+      .catchError((err) => throw err);
+}

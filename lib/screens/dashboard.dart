@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:trker/screens/Home.dart';
+import 'package:trker/screens/appHome/home.dart';
 import 'package:trker/utils/constants.dart';
 
 class Dashboard extends StatefulWidget {
@@ -12,8 +12,7 @@ class _DashboardState extends State<Dashboard> {
   int _currentIndex = 1;
   final List<Widget> _children = [
     Text('Notifications'),
-    // Home(),
-    Text('Home'),
+    Home(),
     Text('Settings'),
   ];
 
@@ -38,6 +37,10 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        elevation: 0,
+      ),
       body: SafeArea(child: _children[_currentIndex]),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: kPrimaryColor,
@@ -45,9 +48,9 @@ class _DashboardState extends State<Dashboard> {
         currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.notifications_active_outlined), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: ''),
+              icon: Icon(Icons.notifications_active_outlined), label: 'Notifications'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
         ],
       ),
     );

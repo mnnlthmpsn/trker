@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trker/screens/dashboard.dart';
 import 'package:trker/screens/registration.dart';
+import 'package:trker/utils/api.dart';
 import 'package:trker/utils/constants.dart';
 import 'package:trker/utils/helpers.dart';
 
@@ -24,14 +27,53 @@ class _IntroScreenState extends State<IntroScreen> {
 
   @override
   void initState() {
-    // _checkStatus();
     super.initState();
   }
 
-  _checkStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    !prefs.getBool('first_time') || null ? newPage(context, Dashboard()) : print('first time');
-  }
+  // // check if its first time user uses the app
+  // _checkStatus() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //
+  //   // if first_time is false or null, it isn't user's first time...
+  //   // check if user's account has expired if so or navigate to register
+  //   !prefs.getBool('first_time') || null
+  //       ? await _checkForExpiry()
+  //       : print('Continue with onboarding');
+  // }
+  //
+  // // check if account time expired
+  // _checkForExpiry() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String phone = prefs.getString('phone');
+  //   try {
+  //     await validateUser(phone).then((res) {
+  //       // if res is 0, account hasn't expired else
+  //       // navigate to register screen but set fresh_registration flag to false
+  //       res['status'] == 0 ? _toDashboard() : _reRegister();
+  //     }).catchError((err) {
+  //       print(err);
+  //     });
+  //   } on SocketException catch (_) {
+  //     showSnack(context, 'Network error');
+  //   }
+  // }
+  //
+  // void _toDashboard() {
+  //   newPageDestroyPrevious(context, Dashboard());
+  // }
+  //
+  // // re-register user (re-active account), disable phone by checking
+  // // fresh_registration flag
+  // void _reRegister() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   // check this in registration page.. if false, disable phone field
+  //   await prefs.setBool('fresh_registration', false);
+  //   newPageDestroyPrevious(context, Registration());
+  // }
+  //
+  // void _freshRegistration() {
+  //   newPageDestroyPrevious(context, Registration());
+  // }
 
   static const pageDecoration = const PageDecoration(
     titleTextStyle: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w700),

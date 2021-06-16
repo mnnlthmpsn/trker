@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trker/screens/OTPScreen.dart';
+import 'package:trker/screens/dashboard.dart';
 import 'package:trker/utils/api.dart';
 import 'package:trker/utils/helpers.dart';
 
@@ -26,7 +26,8 @@ class User {
 
     await signup(user).then((res) {
       if (res['status'] == '3' || res['status'] == '2') {
-        throw "Account already exists";
+        // throw "Account already exists";
+        newPageDestroyPrevious(context, Dashboard());
       } else if (res['status'] == '1') {
         newPageDestroyPrevious(context, OTPScreen());
       } else {
