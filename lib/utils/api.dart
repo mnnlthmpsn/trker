@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -34,10 +37,7 @@ Future signup(user) async {
 }
 
 Future validate(phone, code) async {
-  var data = {
-    "phone": phone,
-    "validation_code": code
-  };
+  var data = {"phone": phone, "validation_code": code};
 
   var headers = {"Content-Type": "application/json;charset=UTF-8"};
   var encode = json.encode(data);
@@ -49,10 +49,7 @@ Future validate(phone, code) async {
 }
 
 Future resendOTP(phone) async {
-  var data = {
-    "phone": phone,
-    "key":  "123qwe!@#"
-  };
+  var data = {"phone": phone, "key": "123qwe!@#"};
 
   var headers = {"Content-Type": "application/json;charset=UTF-8"};
   var encode = json.encode(data);
@@ -64,10 +61,7 @@ Future resendOTP(phone) async {
 }
 
 Future validateUser(phone) async {
-  var data = {
-    "phone": phone,
-    "key":  "123qwe!@#"
-  };
+  var data = {"phone": phone, "key": "123qwe!@#"};
 
   var headers = {"Content-Type": "application/json;charset=UTF-8"};
   var encode = json.encode(data);
@@ -79,10 +73,7 @@ Future validateUser(phone) async {
 }
 
 Future fetchOrders() async {
-  var data = {
-    "vpost_code": "00920266666003",
-    "key": "123qwe!@#"
-  };
+  var data = {"vpost_code": "00920266666003", "key": "123qwe!@#"};
 
   var headers = {"Content-Type": "application/json;charset=UTF-8"};
   var encode = json.encode(data);
@@ -90,5 +81,12 @@ Future fetchOrders() async {
   return await http
       .post(Uri.parse(url + '/get_orders'), headers: headers, body: encode)
       .then((response) => jsonDecode(response.body))
-      .catchError((err) => throw err);
+      .catchError((err) => {
+            if (err is SocketException)
+              {throw '001'}
+            else if (err is TimeoutException)
+              {throw '001'}
+            else
+              {throw err}
+          });
 }

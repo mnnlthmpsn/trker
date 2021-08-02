@@ -1,37 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:trker/screens/appHome/packageDetails.dart';
+import 'package:trker/utils/constants.dart';
+import 'package:trker/utils/helpers.dart';
 
 class ItemDetailCard extends StatelessWidget {
-  final name;
-  final color;
+  final title;
+  final subtitle;
 
-  const ItemDetailCard({this.name, this.color});
+  const ItemDetailCard({this.title, this.subtitle});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          width: MediaQuery.of(context).size.width * 0.92,
-          height: 120,
-          child: Card(
-            elevation: 0,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(name),
-                ],
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      child: Container(
+        height: 90,
+        width: MediaQuery.of(context).size.width * 5,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: Colors.white,
+          boxShadow: <BoxShadow>[
+            BoxShadow(color: Color(0xfff3f3f3),
+              spreadRadius: 10,
+              blurRadius: 20
+            ),
+          ]
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            GestureDetector(
+              onTap: () => newPage(context, PackageDetails()),
+              child: ListTile(
+                leading: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.upload_rounded,
+                      color: kSuccessColor,
+                    ),
+                  ],
+                ),
+                title: Text(title),
+                subtitle: Text(subtitle, style: TextStyle(fontWeight: FontWeight.bold),),
+                trailing: Icon(Icons.chevron_right, color: Colors.grey),
               ),
             ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              side: BorderSide(color: color, width: 0.4)
-            ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

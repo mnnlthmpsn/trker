@@ -319,7 +319,7 @@ class _RegistrationState extends State<Registration> {
         backgroundColor: kPrimaryColor,
         onPressed: () => _buttonDone ? _finished() : _continue(),
         child: _buttonDone
-            ? !_loading ? Icon(Icons.done, color: Colors.white) : SpinKitChasingDots(
+            ? !_loading ? Icon(Icons.done, color: Colors.white) : SpinKitRipple(
           color: Colors.white,
           size: 30.0,
         )

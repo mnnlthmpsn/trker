@@ -1,0 +1,141 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:trker/screens/NetworkError.dart';
+import 'package:trker/screens/appHome/itemDetailCard.dart';
+import 'package:trker/utils/api.dart';
+import 'package:trker/utils/constants.dart';
+import 'package:trker/utils/helpers.dart';
+
+class Packages extends StatefulWidget {
+  const Packages({Key key}) : super(key: key);
+
+  @override
+  _PackagesState createState() => _PackagesState();
+}
+
+class _PackagesState extends State<Packages> {
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+  List _sentItems = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    _loadOrders();
+    super.initState();
+  }
+
+  _loadOrders() async {
+    await fetchOrders().then((res) {
+      print(res);
+      setState(() => {_sentItems = res['sent'], _isLoading = false});
+    }).catchError((err) {
+      err == '001' ? newPage(context, NetworkError()) : showSnack(context, err);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return Center(
+        child: SpinKitRipple(
+          color: kPrimaryColor,
+          size: 70,
+        ),
+      );
+    } else {
+      return ListView(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(Icons.select_all, color: kTextColor,),
+                      Text('All', style: TextStyle(fontWeight: FontWeight.bold),)
+                    ],
+                  ),
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Color(0xfff3f3f3),
+                            spreadRadius: 10,
+                            blurRadius: 20)
+                      ]),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.upload_rounded,
+                        color: kSuccessColor,
+                      ),
+                      Text('Sent', style: TextStyle(fontWeight: FontWeight.bold),)
+                    ],
+                  ),
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Color(0xfff3f3f3),
+                            spreadRadius: 10,
+                            blurRadius: 20)
+                      ]),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.download_rounded,
+                        color: kPrimaryColor,
+                      ),
+                      Text('Received', style: TextStyle(fontWeight: FontWeight.bold),)
+                    ],
+                  ),
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Color(0xfff3f3f3),
+                            spreadRadius: 10,
+                            blurRadius: 20)
+                      ]),
+                ),
+              ),
+            ],
+          ),
+          ListView.builder(
+              shrinkWrap: true,
+              itemCount: _sentItems.length,
+              itemBuilder: (context, index) {
+                return ItemDetailCard(
+                  title: _sentItems[index]['package_desc'],
+                  subtitle: _sentItems[index]['comment'],
+                );
+              })
+        ],
+      );
+    }
+  }
+}
