@@ -36,9 +36,10 @@ class _KSplashScreenState extends State<KSplashScreen> {
 
     // if first_time is false or null, it isn't user's first time...
     // check if user's account has expired if so or navigate to register
-    prefs.getBool('first_time')
+    prefs.getBool('first_time') == false
         ? _onBoarding()
         : await _checkForExpiry();
+
   }
 
   // on boarding

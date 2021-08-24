@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trker/screens/IntroScreen.dart';
 import 'package:trker/screens/Splash.dart';
-import 'package:trker/screens/dashboard.dart';
 import 'package:trker/utils/constants.dart';
 import 'package:flutter/services.dart';
 
@@ -17,9 +15,8 @@ void main() async {
       fontFamily: "Poppins",
       accentColor: Colors.white,
       primaryColor: kPrimaryColor,
-      visualDensity: VisualDensity.adaptivePlatformDensity,
+      visualDensity: VisualDensity.adaptivePlatformDensity
     ),
-    // home: KSplashScreen(),
-    home: Dashboard()
+    home: KSplashScreen(),
   ));
 }

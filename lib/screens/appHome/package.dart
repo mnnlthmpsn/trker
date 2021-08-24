@@ -16,7 +16,10 @@ class Packages extends StatefulWidget {
 class _PackagesState extends State<Packages> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   List _sentItems = [];
+  List _receivedItems = [];
   bool _isLoading = true;
+
+  String active = 'sent';
 
   @override
   void initState() {
@@ -27,7 +30,10 @@ class _PackagesState extends State<Packages> {
   _loadOrders() async {
     await fetchOrders().then((res) {
       print(res);
-      setState(() => {_sentItems = res['sent'], _isLoading = false});
+      setState(() => {
+        _sentItems = res['sent'],
+        _receivedItems = res['got'] == 'empty' ? [] : res['got'],
+        _isLoading = false});
     }).catchError((err) {
       err == '001' ? newPage(context, NetworkError()) : showSnack(context, err);
     });
@@ -49,89 +55,75 @@ class _PackagesState extends State<Packages> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(Icons.select_all, color: kTextColor,),
-                      Text('All', style: TextStyle(fontWeight: FontWeight.bold),)
-                    ],
-                  ),
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Color(0xfff3f3f3),
-                            spreadRadius: 10,
-                            blurRadius: 20)
-                      ]),
-                ),
-              ),
-              Padding(
                 padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.upload_rounded,
-                        color: kSuccessColor,
-                      ),
-                      Text('Sent', style: TextStyle(fontWeight: FontWeight.bold),)
-                    ],
+                // sent
+                child: InkWell(
+                  onTap: () => setState(() => active = 'sent'),
+                  child: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.upload_rounded,
+                          color: kPrimaryColor,
+                        ),
+                        Text('Sent', style: TextStyle(fontWeight: FontWeight.bold),)
+                      ],
+                    ),
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Color(0xfff3f3f3),
+                              spreadRadius: 10,
+                              blurRadius: 20)
+                        ]),
                   ),
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Color(0xfff3f3f3),
-                            spreadRadius: 10,
-                            blurRadius: 20)
-                      ]),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 20),
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.download_rounded,
-                        color: kPrimaryColor,
-                      ),
-                      Text('Received', style: TextStyle(fontWeight: FontWeight.bold),)
-                    ],
+                // received
+                child: InkWell(
+                  onTap: () => setState(() => active = 'received'),
+                  child: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.download_rounded,
+                          color: kSecondaryColor,
+                        ),
+                        Text('Received', style: TextStyle(fontWeight: FontWeight.bold),)
+                      ],
+                    ),
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Color(0xfff3f3f3),
+                              spreadRadius: 10,
+                              blurRadius: 20)
+                        ]),
                   ),
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Color(0xfff3f3f3),
-                            spreadRadius: 10,
-                            blurRadius: 20)
-                      ]),
                 ),
               ),
             ],
           ),
           ListView.builder(
               shrinkWrap: true,
-              itemCount: _sentItems.length,
+              itemCount: active == 'sent' ? _sentItems.length : _receivedItems.length,
               itemBuilder: (context, index) {
                 return ItemDetailCard(
-                  title: _sentItems[index]['package_desc'],
-                  subtitle: _sentItems[index]['comment'],
+                  header: active,
+                  title: active == 'sent' ? _sentItems[index]['package_desc'] : _receivedItems[index]['package_desc'],
+                  subtitle: active == 'sent' ? _sentItems[index]['comment'] : _receivedItems[index]['comment'],
                 );
               })
         ],

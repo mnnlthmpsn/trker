@@ -6,8 +6,9 @@ import 'package:trker/utils/helpers.dart';
 class ItemDetailCard extends StatelessWidget {
   final title;
   final subtitle;
+  final header;
 
-  const ItemDetailCard({this.title, this.subtitle});
+  const ItemDetailCard({this.title, this.subtitle, this.header});
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +37,13 @@ class ItemDetailCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.upload_rounded,
-                      color: kSuccessColor,
+                      header == 'sent' ? Icons.upload_rounded : Icons.download_rounded,
+                      color: header == 'sent' ? kPrimaryColor : kSecondaryColor,
                     ),
                   ],
                 ),
-                title: Text(title),
-                subtitle: Text(subtitle, style: TextStyle(fontWeight: FontWeight.bold),),
+                title: Text(title, style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.grey[600]),),
+                subtitle: Text(subtitle, style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),),
                 trailing: Icon(Icons.chevron_right, color: Colors.grey),
               ),
             ),

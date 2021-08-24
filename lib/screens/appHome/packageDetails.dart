@@ -15,7 +15,10 @@ class _PackageDetailsState extends State<PackageDetails> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Colors.black
+        ),
       ),
       body: Text('Body')
     );

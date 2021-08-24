@@ -12,7 +12,7 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
 
-  String _title = '';
+  Widget _title;
 
   int _currentIndex = 1;
   final List<Widget> _children = [
@@ -40,9 +40,9 @@ class _DashboardState extends State<Dashboard> {
   }
 
   void _checkCurrentPage(){
-    _currentIndex == 0 ? setState(() => _title = 'Packages') : '';
-    _currentIndex == 1 ? setState(() => _title = '') : '';
-    _currentIndex == 2 ? setState(() => _title = 'Settings') : '';
+    _currentIndex == 0 ? setState(() => _title = Text('Packages', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black))) : '';
+    _currentIndex == 1 ? setState(() => _title = Text('Paypack', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 14))) : '';
+    _currentIndex == 2 ? setState(() => _title = Text('Settings', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black))) : '';
   }
 
   @override
@@ -52,18 +52,21 @@ class _DashboardState extends State<Dashboard> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: _currentIndex != 1 ? Colors.white : kPrimaryLightColor,
-        title: Text(_title, style: TextStyle(fontWeight: FontWeight.bold),),
+        backgroundColor: _currentIndex != 1 ? Colors.white : kPrimaryColor,
+        title: _title,
         automaticallyImplyLeading: false,
         actions: <Widget>[
-          IconButton(onPressed: () => showSnack(context, 'Get in Touch'), icon: Icon(Icons.qr_code_outlined))
+          IconButton(onPressed: () => showSnack(context, 'Get in Touch'), icon: Icon(Icons.qr_code_outlined, color: _currentIndex != 1 ? Colors.black : Colors.white,))
         ],
         elevation: 0,
       ),
       body: SafeArea(child: _children[_currentIndex]),
       bottomNavigationBar: BottomNavigationBar(
+        selectedFontSize: 12,
+        unselectedFontSize: 12,
         backgroundColor: Colors.white,
         elevation: 20,
+        enableFeedback: true,
         selectedItemColor: kPrimaryColor,
         onTap: _onTabPressed,
         currentIndex: _currentIndex,
