@@ -17,7 +17,7 @@ class KSplashScreen extends StatefulWidget {
 }
 
 class _KSplashScreenState extends State<KSplashScreen> {
-  dynamic screen = NetworkError();
+  dynamic screen = IntroScreen();
 
   @override
   void initState() {

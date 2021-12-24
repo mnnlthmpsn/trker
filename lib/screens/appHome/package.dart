@@ -120,10 +120,14 @@ class _PackagesState extends State<Packages> {
               shrinkWrap: true,
               itemCount: active == 'sent' ? _sentItems.length : _receivedItems.length,
               itemBuilder: (context, index) {
-                return ItemDetailCard(
-                  header: active,
-                  title: active == 'sent' ? _sentItems[index]['package_desc'] : _receivedItems[index]['package_desc'],
-                  subtitle: active == 'sent' ? _sentItems[index]['comment'] : _receivedItems[index]['comment'],
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: ItemDetailCard(
+                    header: active,
+                    id: active == 'sent' ? _sentItems[index]['txn_id'] : _receivedItems[index]['txn_id'],
+                    title: active == 'sent' ? _sentItems[index]['package_desc'] : _receivedItems[index]['package_desc'],
+                    subtitle: active == 'sent' ? _sentItems[index]['comment'] : _receivedItems[index]['comment'],
+                  ),
                 );
               })
         ],

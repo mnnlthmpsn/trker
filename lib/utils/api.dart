@@ -72,6 +72,14 @@ Future validateUser(phone) async {
       .catchError((err) => throw err);
 }
 
+Future fetchSingleOrder(id) async {
+  var headers = {"Content-Type": "application/json;charset=UTF-8"};
+  return await http
+      .get(Uri.parse(url))
+      .then((response) => jsonDecode(response.body))
+      .catchError((err) => throw err);
+}
+
 Future fetchOrders() async {
   var data = {"vpost_code": "00920266666003", "key": "123qwe!@#"};
 

@@ -7,8 +7,9 @@ class ItemDetailCard extends StatelessWidget {
   final title;
   final subtitle;
   final header;
+  final id;
 
-  const ItemDetailCard({this.title, this.subtitle, this.header});
+  const ItemDetailCard({this.title, this.subtitle, this.header, this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,7 @@ class ItemDetailCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             GestureDetector(
-              onTap: () => newPage(context, PackageDetails()),
+              onTap: () => newPage(context, PackageDetails(id: id)),
               child: ListTile(
                 leading: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

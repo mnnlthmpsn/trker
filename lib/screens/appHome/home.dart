@@ -105,7 +105,11 @@ class _HomeState extends State<Home> {
               Positioned.fill(
                   child: Align(
                       alignment: Alignment.bottomCenter,
-                      child: Image.asset('assets/images/google-pay.png')))
+                      child: SizedBox(
+                        width: 120,
+                          height: 120,
+                          child:
+                              Image.asset('assets/images/delivery-man.png'))))
             ],
           ),
           Container(
